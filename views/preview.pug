@@ -1,0 +1,50 @@
+html
+  head
+    title=data.toponymName
+    script(src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.js")
+    link(rel="stylesheet", type="text/css" href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.3.1/mapbox-gl.css")
+  body
+    h1= data.toponymName
+    p #{data.toponymName}, #{data.countryName} 
+      if data.wikipediaURL
+        p #[a(href=`https://${data.wikipediaURL}`, target="_blank") Wikipedia]
+
+    div(id="map", style="width: 200px; height: 200px")
+
+  if token && data.bbox
+    script. 
+      mapboxgl.accessToken = "#{token}";
+      var map = new mapboxgl.Map({
+              container: 'map',
+              style: 'mapbox://styles/mapbox/light-v10',
+              center: [#{data.bbox.east}, #{data.bbox.south}],
+              zoom: 4
+            });
+      map.on('load', function () {
+        map.addLayer({
+          "id": "geoname",
+          "type": "fill",
+          "paint": {
+            "fill-color": "#666666",
+            "fill-opacity": .5
+          },
+          "source": {
+            "type": "geojson",
+            "data": {
+              "type": "Feature",
+              "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                  [ [#{data.bbox.east}, #{data.bbox.north}], 
+                  [#{data.bbox.east}, #{data.bbox.south}], 
+                  [#{data.bbox.west}, #{data.bbox.south}], 
+                  [#{data.bbox.west}, #{data.bbox.north}], 
+                  [#{data.bbox.east}, #{data.bbox.north}] ]
+                ]
+              }
+            }
+          }
+        });
+      });
+
+          
