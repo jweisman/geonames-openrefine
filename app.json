@@ -1,0 +1,17 @@
+{
+  "name": "Geonames-OpenRefine",
+  "description": "OpenRefine wrapper for the Geonames webservice",
+  "repository": "https://github.com/jweisman/geonames-openrefine",
+  "keywords": ["exlibris"],
+  "env": {
+      "GEONAMES_USERNAME": {
+        "description": "Username from the Geonames site. Be sure to activate the username for free API usage.",
+        "required": true
+      },
+      "MAPBOX_ACCESS_TOKEN": {
+        "description": "Token from the MapBox site for use in the location preview pane.",
+        "required": false
+      }
+    },
+  "success_url": "/reconcile"
+}
