@@ -14,7 +14,7 @@ app.set('json spaces', 2);
 app.set('view engine', 'pug')
 app.use(cors());
 
-const getHost = (req) => req.protocol + '://' + req.get('host');
+const getHost = (req) => (req.headers['x-forwarded-proto'] || req.protocol) + '://' + req.get('host');
 const getReferrer = (req) => getHost(req) + req.originalUrl;
 
 const serviceDesc = (url) => {
@@ -33,7 +33,7 @@ const serviceDesc = (url) => {
     },
     schemaSpace: "http://www.geonames.org/ontology/",
     view: {
-      url: "http://sws.geonames.org/{{id}}/"
+      url: "https://sws.geonames.org/{{id}}/"
     }
   }
 }
