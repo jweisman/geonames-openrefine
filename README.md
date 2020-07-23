@@ -11,5 +11,22 @@ The service uses the demo account by default. You should create a username at th
 ## Mapbox Usage
 The preview functionality can show a map of the location if you provide an access token. Create a free account on the [MapBox site](https://account.mapbox.com "MapBox site") and add a new [access token](https://account.mapbox.com/access-tokens/ "access token"). Then set the token in the `MAPBOX_ACCESS_TOKEN` environment variable.
 
+## Deployment
 
+### Deploy to AWS
+This app uses the [aws-serverless-express](https://github.com/awslabs/aws-serverless-express/) library to adapt the Express app to AWS Serverless. To deploy the app, set the following NPM configuration (for example in a `.npmrc` file:)
+```
+s3BucketName = <NAME>
+region = us-east-1
+cloudFormationStackName = GeonamesOpenRefineStack
+functionName = GeonamesOpenRefine
+accountId = <ACCOUNT>
+```
+
+Then deploy the app with:
+```
+$ npm run package-deploy
+```
+
+### Deploy to Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)

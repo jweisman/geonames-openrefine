@@ -1,12 +1,17 @@
 {
   "name": "geonames-openrefine",
   "dependencies": {
+    "aws-serverless-express": "^3.3.8",
     "axios": "^0.19.0",
     "cors": "^2.8.5",
     "express": "~4.17.1",
     "pug": "^2.0.4"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js",
+    "package": "aws cloudformation package --template ./cloudformation.yaml --s3-bucket $npm_config_s3BucketName --output-template packaged-sam.yaml --region $npm_config_region",
+    "deploy": "aws cloudformation deploy --template-file packaged-sam.yaml --stack-name $npm_config_cloudFormationStackName --capabilities CAPABILITY_IAM --region $npm_config_region",
+    "package-deploy": "npm run package && npm run deploy",
+    "delete-stack": "aws cloudformation delete-stack --stack-name $npm_config_cloudFormationStackName --region $npm_config_region"
   }
 }

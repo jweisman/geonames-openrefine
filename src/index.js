@@ -12,6 +12,7 @@ const MAPBOX_ACCESS_TOKEN = process.env['MAPBOX_ACCESS_TOKEN'];
 var app = express();
 app.set('json spaces', 2);
 app.set('view engine', 'pug')
+app.set('views',  __dirname + '/views')
 app.use(cors());
 
 const getHost = (req) => (req.headers['x-forwarded-proto'] || req.protocol) + '://' + req.get('host');
@@ -48,9 +49,9 @@ const callGeonames = async (urls) => {
   return Object.assign({}, ...await Promise.all(promises));
 }
 
-app.get('/', (req, res) => res.send('OpenRefine Geonames'));
+app.get(/\/*.*\/$/, (req, res) => res.send('OpenRefine Geonames'));
 
-app.get('/reconcile', async (req, res) => {
+app.get(/\/*.*\/reconcile$/, async (req, res) => {
   if (req.query.queries) {
     try {
       let answer = {}
@@ -68,7 +69,7 @@ app.get('/reconcile', async (req, res) => {
   }
 });
 
-app.get('/reconcile/preview', async (req, res) => {
+app.get(/\/*.*\/reconcile\/preview$/, async (req, res) => {
   if (!req.query.id) res.status(400).send('ID not provided');
   else {
     const response = await axios.get(`${GEONAMES_URL}getJSON?geonameId=${req.query.id}&username=${GEONAMES_USERNAME}`);
@@ -76,5 +77,6 @@ app.get('/reconcile/preview', async (req, res) => {
   }
 })
 
-app.listen(PORT);
+module.exports = app;
+if (!!!process.env.LAMBDA_TASK_ROOT) app.listen(PORT);
 
